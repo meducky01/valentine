@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Be My Valentine?</title>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+  <style>
+    :root {
+      --bg1: #ffd6e7;
+      --bg2: #ffeef6;
+      --card: #ffffffcc;
+      --yes: #ff3b7a;
+      --yesHover: #ff1f68;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100svh;
+      display: grid;
+      place-items: center;
+      background: radial-gradient(circle at top, var(--bg2), var(--bg1));
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      overflow: hidden;
+      padding: 16px;
+    }
+
+    #confettiCanvas {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    .card {
+      width: min(500px, 92vw);
+      padding: 40px 20px;
+      background: var(--card);
+      backdrop-filter: blur(10px);
+      border-radius: 30px;
+      text-align: center;
+      box-shadow: 0 18px 60px rgba(0,0,0,.1);
+      z-index: 10;
+    }
+
+    .art {
+      width: 180px;
+      margin: 0 auto 20px;
+    }
+
+    h1 {
+      font-size: clamp(24px, 6vw, 36px);
+      color: #d63384;
+      margin-bottom: 30px;
+    }
+
+    .button-zone {
+      position: relative;
+      height: 200px;
+      width: 100%;
+    }
+
+    button {
+      position: absolute;
+      padding: 15px 35px;
+      font-size: 20px;
+      font-weight: bold;
+      border-radius: 50px;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    #yesBtn {
+      left: 20%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      background: var(--yes);
+      color: white;
+      z-index: 100;
+    }
+
+    #noBtn {
+      left: 70%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      background: #eee;
+      color: #555;
+    }
+
+    .result {
+      display: none;
+      animation: pop 0.5s ease-out;
+    }
+
+    @keyframes pop {
+      0% { transform: scale(0); }
+      100% { transform: scale(1); }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="confettiCanvas"></canvas>
+
+  <main class="card" id="mainCard">
+    <div id="askInterface">
+      <img class="art" src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHJreGZueXFmZ3R4bmhxZzR4eGZyeGZyeGZyeGZyeGZyeGZyeGZyeCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/cLS1cfxvGOPVpf9g3y/giphy.gif" alt="Cute bear">
+      <h1>Nirali, will you be my Valentine? 🌹</h1>
+      <div class="button-zone" id="zone">
+        <button id="yesBtn">Yes</button>
+        <button id="noBtn">No</button>
+      </div>
+    </div>
+
+    <div class="result" id="result">
+      <h1>YAY! See you then! ❤️</h1>
+      <img src="https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif" width="100%">
+    </div>
+  </main>
+
+  <script>
+    const yesBtn = document.getElementById("yesBtn");
+    const noBtn = document.getElementById("noBtn");
+    const askInterface = document.getElementById("askInterface");
+    const result = document.getElementById("result");
+    const zone = document.getElementById("zone");
+    let scale = 1;
+
+    // Movement Logic
+    noBtn.addEventListener("mouseover", moveButton);
+    noBtn.addEventListener("touchstart", (e) => { e.preventDefault(); moveButton(); });
+
+    function moveButton() {
+      const x = Math.random() * (zone.offsetWidth - noBtn.offsetWidth);
+      const y = Math.random() * (zone.offsetHeight - noBtn.offsetHeight);
+      
+      noBtn.style.left = `${x}px`;
+      noBtn.style.top = `${y}px`;
+      
+      scale += 0.15;
+      yesBtn.style.transform = `translate(-50%, -50%) scale(${scale})`;
+    }
+
+    yesBtn.addEventListener("click", () => {
+      askInterface.style.display = "none";
+      result.style.display = "block";
+      confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+    });
+  </script>
+</body>
+</html>
